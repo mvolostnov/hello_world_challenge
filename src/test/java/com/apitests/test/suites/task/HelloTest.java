@@ -27,7 +27,7 @@ public class HelloTest extends BaseTest {
                 .log().body()
                 .statusCode(200)
                 .body("resultCode", equalTo("Ok"))
-                .body("message", equalTo("Hello, " + ClientData.fullName + "!1"))
+                .body("message", equalTo("Hello, " + ClientData.fullName + "!"))
                 ;
     }
 
