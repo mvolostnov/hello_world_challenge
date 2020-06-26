@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name = "todoist">
+        <test name = "Task tests">
+            <classes>
+                <class name="com.apitests.test.suites.task.HelloTest"/>
+
+            </classes>
+        </test>
+ </suite>
+
