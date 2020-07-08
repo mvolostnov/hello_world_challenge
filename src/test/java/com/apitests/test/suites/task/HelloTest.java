@@ -1,16 +1,11 @@
 package com.apitests.test.suites.task;
 
-import com.apitests.test.BaseTest;
-import com.apitests.test.data.entities.DataProviderClass;
-import com.apitests.test.data.entities.SessionData;
-import com.apitests.test.data.entities.ClientData;
-import com.apitests.webservices.HelloWorldChallengeAPI;
+import com.libertex.apitests.test.BaseTest;
+import com.libertex.apitests.test.data.entities.ClientData;
+import com.libertex.apitests.test.data.entities.DataProviderClass;
+import com.libertex.apitests.test.data.entities.SessionData;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.annotations.Test;
-
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
 
 @Slf4j
 public class HelloTest extends BaseTest {
@@ -20,14 +15,17 @@ public class HelloTest extends BaseTest {
     public void helloRequestCorrectValuesTest(){
         log.info("Start helloRequestCorrectValuesTest: ");
 
+        String fullName = ClientData.getFullName();
+        String username = ClientData.getUserName();
+
         ws.helloWorldChallengeAPI()
-                .getSessionID()
-                .sendHelloRequest(HelloWorldChallengeAPI.xSessionId)
-                .then()
-                .log().body()
-                .statusCode(200)
-                .body("resultCode", equalTo("Ok"))
-                .body("message", equalTo("Hello, " + ClientData.fullName + "!"))
+                .getSessionID(fullName, username)
+                .sendHelloRequest(/*HelloWorldChallengeAPI.xSessionId*/)
+                .validate()
+                .statusCodeEqualsTo(200)
+                .bodyParamEqualsTo("resultCode", "Ok")
+                .bodyParamEqualsTo("message", "Hello, " +  fullName + "!")
+ //               .body("message", equalTo("Hello, " +  fullName + "!"))
                 ;
     }
 
@@ -36,14 +34,25 @@ public class HelloTest extends BaseTest {
     public void helloRequestIncorrectValuesTest(SessionData sessionData){
         log.info("Start helloRequestIncorrectValuesTest: ");
 
+        String fullName = ClientData.getFullName();
+        String username = ClientData.getUserName();
+
         ws.helloWorldChallengeAPI()
-                .getSessionID()
-                .sendHelloRequest(sessionData.getXSessionId())
-                .then()
+//                .getSessionID(fullName, username)
+                .fakeSessionID(sessionData.getXSessionId())
+                .sendHelloRequest(/*sessionData.getXSessionId()*/)
+                .validate()
+                .statusCodeEqualsTo(401)
+                .bodyParamEqualsTo("resultCode", "Unauthorized");
+/*
+               .then()
                 .log().body()
                 .statusCode(401)
                 .body("resultCode", equalTo("Unauthorized"));
- System.out.println("Test1111");
+
+*/
+        System.out.println("Test1111");
     }
+
 
 }
