@@ -43,7 +43,7 @@ public class HelloTest extends BaseTest {
                 .log().body()
                 .statusCode(401)
                 .body("resultCode", equalTo("Unauthorized"));
-
+ System.out.println("Test1111");
     }
 
 }
